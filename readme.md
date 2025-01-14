@@ -2,7 +2,7 @@
 
 ## Descrição
 
-Este projeto é um sistema de gerenciamento de almoxarifado hospitalar desenvolvido como parte da disciplina de **Programação Orientada a Objetos (POO)**. O objetivo é fornecer uma solução simples e eficiente para gerenciar o estoque de materiais hospitalares, incluindo cadastro de itens, controle de estoque e registro de movimentações.
+Este projeto é um sistema de gerenciamento de almoxarifado hospitalar desenvolvido como parte da disciplina de **Programação Orientada a Objetos (POO)**. O objetivo é fornecer uma solução simples e eficiente para gerenciar o estoque de materiais hospitalares, incluindo cadastro de itens e controle de estoque.
 
 ## Funcionalidades
 
