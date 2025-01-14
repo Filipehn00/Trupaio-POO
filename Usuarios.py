@@ -12,7 +12,6 @@ class Usuario:
 
     @classmethod
     def to_dict(self): #Salva funcionários no dicionário
-
         return {
             "tipo": self.__class__.__name__,
             "nome": self.nome,
@@ -33,6 +32,8 @@ class Usuario:
             return Farmaceutico(**data)
         elif tipo == "AuxServicosGerais":
             return AuxServicosGerais(**data)
+        elif tipo == Usuario(**data):
+            return
         else:
             return cls(**data)
 
@@ -40,7 +41,7 @@ class Usuario:
 class Administrador(Usuario): #ADM
     #Somente o adm tem os métdos que adicionam ou removem usuários.
     def cadastrar_usuario(self, usuarios): 
-        print("\nEscolha o tipo de usuário a ser cadastrado:")
+        print("\nEscolha a função do usuário a ser cadastrado:")
         print("1) Enfermeiro")
         print("2) Farmacêutico")
         print("3) Auxiliar de Serviços Gerais")

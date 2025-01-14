@@ -22,7 +22,6 @@ def init_db(db_name="almoxarifado.db"):
         senha TEXT NOT NULL
     )
     ''')
-
     cursor.execute('''
     CREATE TABLE IF NOT EXISTS itens (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -31,10 +30,6 @@ def init_db(db_name="almoxarifado.db"):
         tipo TEXT NOT NULL
     )
     ''')
-
-    # cursor.execute('''
-    # ALTER TABLE usuarios ADD COLUMN tipo TEXT DEFAULT 'Usuario'
-    # ''')
     
     conn.commit()
     conn.close()
@@ -71,18 +66,14 @@ def carregar_dados(db_name="almoxarifado.db"):
     almoxarifado = Almoxarifado()
     conn = sqlite3.connect(db_name)
     cursor = conn.cursor()
-
-    # Corrige os dados (tenta ajustar o banco)
-    try:
-        corrigir_dados()
-    except Exception as e:
-        print(f"Erro ao corrigir dados: {e}")
-
+    corrigir_dados()
     # Carrega os usuários
-    cursor.execute("SELECT nome, funcao, login, senha FROM usuarios")
+    cursor.execute("SELECT nome, funcao, login, senha, tipo FROM usuarios")
     for row in cursor.fetchall():
-        usuario_data = {"nome": row[0], "funcao": row[1], "login": row[2], "senha": row[3]}
+
+        usuario_data = {"nome": row[0], "funcao": row[1], "login": row[2], "senha": row[3], "tipo": row[4]}
         almoxarifado.usuarios.append(Usuario.from_dict(usuario_data))
+
 
     # Carrega os itens
     cursor.execute("SELECT nome, qtd, tipo FROM itens")
@@ -118,7 +109,7 @@ def corrigir_dados():
 
     for usuario in usuarios:
         id, funcao = usuario
-        if funcao == "Administrador":
+        if funcao == "TI":
             tipo = "Administrador"
         elif funcao == "Enfermeiro":
             tipo = "Enfermeiro"
@@ -126,8 +117,6 @@ def corrigir_dados():
             tipo = "Farmaceutico"
         elif funcao == "Auxiliar de Serviços Gerais":
             tipo = "AuxServicosGerais"
-        else:
-            tipo = "Usuario"
 
         # Atualiza a coluna "tipo"
         cur.execute("UPDATE usuarios SET tipo = ? WHERE id = ?", (tipo, id))
