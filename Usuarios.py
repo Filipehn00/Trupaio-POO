@@ -21,7 +21,7 @@ class Usuario:
         }
 
     @classmethod
-    def from_dict(cls, data): #Puxa os Funcionários do dicionário
+    def from_dict(classe, data): #Puxa os Funcionários do dicionário
         tipo = data.pop("tipo")
         #Dependendo do tipo de funcionário adicionado, cria a subclasse de usuário
         if tipo == "Administrador":
@@ -32,10 +32,8 @@ class Usuario:
             return Farmaceutico(**data)
         elif tipo == "AuxServicosGerais":
             return AuxServicosGerais(**data)
-        elif tipo == Usuario(**data):
-            return
         else:
-            return cls(**data)
+            return classe(**data)
 
 
 class Administrador(Usuario): #ADM

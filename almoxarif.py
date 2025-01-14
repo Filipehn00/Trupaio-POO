@@ -18,24 +18,24 @@ class Almoxarifado:
         #Lista de Funcionários
         self.usuarios = []
 
-    def adicionar_item(self, item, usuario): #método para adição de item
+    def entrada_item(self, item, usuario): #método para adição de item
         if isinstance(usuario, Enfermeiro) and isinstance(item, EquipamentoMedico):
         #Checa se o funcionário está adicionando o item correto
             for i in self.itens_enfermeiro:
                 if i.nome.lower() == item.nome.lower(): #Se o nome do item for igual, não cria um item novo.
-                    i.qtd +=item.qtd #Somente a quantidade do item é aumentada
+                    i.quantidade +=item.quantidade #Somente a quantidade do item é aumentada
                     return
             self.itens_enfermeiro.append(item) #cria um item novo na lista de itens específica
         elif isinstance(usuario, Farmaceutico) and isinstance(item, Medicacao):
             for i in self.itens_farmaceutico:
                 if i.nome.lower() == item.nome.lower():
-                    i.qtd +=item.qtd
+                    i.quantidade +=item.quantidade
                     return
             self.itens_farmaceutico.append(item)
         elif isinstance(usuario, AuxServicosGerais) and isinstance(item, ProdutoLimpeza):
             for i in self.itens_aux_servicos_gerais:
                 if i.nome.lower() == item.nome.lower():
-                    i.qtd +=item.qtd
+                    i.quantidade +=item.quantidade
                     return
             self.itens_aux_servicos_gerais.append(item) 
         else: #Se o funcionário tenta adicionar um item que não é dele
@@ -43,7 +43,7 @@ class Almoxarifado:
             input("Pressione Enter para retornar")
             #Isso não acontece em circunstâncias normais
 
-    def remover_item(self, nome, usuario): #Método para retirada de itens
+    def saida_item(self, nome, usuario): #Método para retirada de itens
         #Pega o item, se o usuário tem acesso a ele
         if isinstance(usuario, Enfermeiro):
             self.itens_enfermeiro = [item for item in self.itens_enfermeiro if item.nome != nome]
@@ -77,14 +77,14 @@ def to_dict(self, conexao):
     cursor = conexao.cursor()
     
     # Recupera os itens para cada tipo de usuário
-    cursor.execute("SELECT nome, qtd FROM itens WHERE tipo = 'EquipamentoMedico'")
-    self.itens_enfermeiro = [Item(nome, qtd) for nome, qtd in cursor.fetchall()]
+    cursor.execute("SELECT nome, quantidade FROM itens WHERE tipo = 'EquipamentoMedico'")
+    self.itens_enfermeiro = [Item(nome, quantidade) for nome, quantidade in cursor.fetchall()]
 
-    cursor.execute("SELECT nome, qtd FROM itens WHERE tipo = 'Medicacao'")
-    self.itens_farmaceutico = [Item(nome, qtd) for nome, qtd in cursor.fetchall()]
+    cursor.execute("SELECT nome, quantidade FROM itens WHERE tipo = 'Medicacao'")
+    self.itens_farmaceutico = [Item(nome, quantidade) for nome, quantidade in cursor.fetchall()]
 
-    cursor.execute("SELECT nome, qtd FROM itens WHERE tipo = 'ProdutoLimpeza'")
-    self.itens_aux_servicos_gerais = [Item(nome, qtd) for nome, qtd in cursor.fetchall()]
+    cursor.execute("SELECT nome, quantidade FROM itens WHERE tipo = 'ProdutoLimpeza'")
+    self.itens_aux_servicos_gerais = [Item(nome, quantidade) for nome, quantidade in cursor.fetchall()]
 
     # Recupera os usuários
     cursor.execute("SELECT nome, funcao, login, senha, tipo FROM usuarios")
@@ -99,22 +99,22 @@ def to_dict(self, conexao):
     }
 
 @classmethod
-def from_dict(cls, data, conexao):
-    almoxarifado = cls()
+def from_dict(classe, data, conexao):
+    almoxarifado = classe()
     cursor = conexao.cursor()
 
     # Insere os itens para cada tipo
     for item in data["itens_enfermeiro"]:
-        cursor.execute("INSERT INTO itens (nome, qtd, tipo) VALUES (?, ?, ?)",
-                       (item["nome"], item["qtd"], "EquipamentoMedico"))
+        cursor.execute("INSERT INTO itens (nome, quantidade, tipo) VALUES (?, ?, ?)",
+                       (item["nome"], item["quantidade"], "EquipamentoMedico"))
 
     for item in data["itens_farmaceutico"]:
-        cursor.execute("INSERT INTO itens (nome, qtd, tipo) VALUES (?, ?, ?)",
-                       (item["nome"], item["qtd"], "Medicacao"))
+        cursor.execute("INSERT INTO itens (nome, quantidade, tipo) VALUES (?, ?, ?)",
+                       (item["nome"], item["quantidade"], "Medicacao"))
 
     for item in data["itens_aux_servicos_gerais"]:
-        cursor.execute("INSERT INTO itens (nome, qtd, tipo) VALUES (?, ?, ?)",
-                       (item["nome"], item["qtd"], "ProdutoLimpeza"))
+        cursor.execute("INSERT INTO itens (nome, quantidade, tipo) VALUES (?, ?, ?)",
+                       (item["nome"], item["quantidade"], "ProdutoLimpeza"))
 
     # Insere os usuários
     for usuario in data["usuarios"]:
