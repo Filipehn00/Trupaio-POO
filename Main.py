@@ -176,6 +176,8 @@ if __name__ == "__main__":
 
             else: #Se o usuário não está cadastrado, volta para a tela de login
                 Clear()
+                print(f'{usuario.senha}')
+                print(f'{login}')
                 input("Usuário ou senha inválidos. Pressione Enter para voltar.")  
 
         elif opcao == "2": 

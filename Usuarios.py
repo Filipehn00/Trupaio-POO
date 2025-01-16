@@ -1,4 +1,4 @@
-#Não é necessário importar
+import sqlite3, bcrypt
 #Usuários salvos e as sublcasses de usuários
 class Usuario:
     def __init__(self, nome, funcao, login, senha): #Construtor da classe com seus atributos
@@ -7,8 +7,10 @@ class Usuario:
         self.login = login
         self.senha = senha
 
-    def autenticar(self, senha): #Método para autenticar funcionários
-        return self.senha == senha
+    def autenticar(self, senha):
+        return bcrypt.checkpw(senha.encode('utf-8'), self.senha.encode('utf-8') if isinstance(self.senha, str) else self.senha)
+
+
 
     @classmethod
     def to_dict(self): #Salva funcionários no dicionário
@@ -19,6 +21,25 @@ class Usuario:
             "login": self.login,
             "senha": self.senha,
         }
+    
+    @staticmethod
+    def verificar_login(login, senha, db_name="almoxarifado.db"):
+        """Verifica o login e a senha de um usuário."""
+        conn = sqlite3.connect(db_name)
+        cursor = conn.cursor()
+
+        cursor.execute("SELECT senha FROM usuarios WHERE login = ?", (login,))
+        result = cursor.fetchone()
+
+        if result:
+            senha_hash = result[0]
+            # Verifica a senha usando bcrypt
+            if bcrypt.checkpw(senha.encode('utf-8'), senha_hash):
+                conn.close()
+                return True
+
+        conn.close()
+        return False
 
     @classmethod
     def from_dict(classe, data): #Puxa os Funcionários do dicionário
@@ -70,6 +91,9 @@ class Administrador(Usuario): #ADM
                     #Cria a classe com base no tipo escolhido e adiciona o usuário no dicionário.
                     usuarios.append(novo_usuario)
                     print(f"{nome} cadastrado com sucesso!")
+                else: print(f"Senha invalida.")
+            else: print(f"Login invalido.")
+        else: print(f"Nome invalido.")    
 
     def listar_usuarios(self, usuarios):
         #Mostra todos os usuários
