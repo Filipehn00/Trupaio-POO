@@ -1,10 +1,8 @@
 import os;
-import sqlite3;
 
 #Importa os arquivos do trabalho
-from almoxarif import Almoxarifado, Usuario
 from Usuarios import Administrador, AuxServicosGerais, Farmaceutico, Enfermeiro
-from Itens import Item, EquipamentoMedico, ProdutoLimpeza, Medicacao
+from Itens import EquipamentoMedico, ProdutoLimpeza, Medicacao
 import database
 
 #Persistência de dados.
@@ -39,8 +37,9 @@ if __name__ == "__main__":
             #Tela de Login
             login = input("Insira seu Login: ")
             senha = input("Insira sua Senha: ")
+            hash = database.criar_senha(senha)
             usuario = next((u for u in almoxarifado.usuarios if u.login == login), None)
-
+            print(hash)
             if usuario and usuario.autenticar(senha):
                 if isinstance(usuario, Administrador):
                     #Abre o menu de administrador se o usuário logado for um administrador

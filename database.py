@@ -1,4 +1,5 @@
 import sqlite3 #Importa o SQLite3, extensão Python que permite usar banco de dados SQL 
+import bcrypt
 
 from almoxarif import Almoxarifado, Usuario
 from Itens import Item, EquipamentoMedico, ProdutoLimpeza, Medicacao
@@ -47,10 +48,14 @@ def salvar_dados(almoxarifado, db_name="almoxarifado.db"):
 
     # Insere os novos dados dos usuários
     for usuario in almoxarifado.usuarios:
+        # Verifica se a senha é str; se for, converte para bytes
+        senha_hash = bcrypt.hashpw(usuario.senha.encode('utf-8'), bcrypt.gensalt())
+
+
         cursor.execute('''
         INSERT INTO usuarios (nome, funcao, login, senha)
         VALUES (?, ?, ?, ?)
-        ''', (usuario.nome, usuario.funcao, usuario.login, usuario.senha))
+        ''', (usuario.nome, usuario.funcao, usuario.login, senha_hash))
 
     # Insere os novos dados em itens
     for lista_itens in [almoxarifado.itens_enfermeiro, almoxarifado.itens_farmaceutico, almoxarifado.itens_aux_servicos_gerais]:
@@ -62,6 +67,20 @@ def salvar_dados(almoxarifado, db_name="almoxarifado.db"):
 
     conn.commit() # Commita 
     conn.close() # Fecha a conexão
+
+
+# Cadastro: Gerando o hash da senha
+def criar_senha(senha):
+    # Gera o hash da senha fornecida
+    salt = bcrypt.gensalt()  # Gera o "sal" de forma automática
+    senha_hash = bcrypt.hashpw(senha.encode('utf-8'), salt)
+    return senha_hash
+
+# Login: Verificando a senha fornecida
+def verificar_senha(senha, senha_hash):
+    # Compara a senha fornecida com o hash armazenado
+    return bcrypt.checkpw(senha.encode('utf-8'), senha_hash)
+
 
 # Função para abrir um banco de dados existente, chamada quando o banco de dados é encontrado
 def carregar_dados(db_name="almoxarifado.db"):
@@ -77,7 +96,11 @@ def carregar_dados(db_name="almoxarifado.db"):
     cursor.execute("SELECT nome, funcao, login, senha, tipo FROM usuarios")
     for row in cursor.fetchall(): # cria um dicionário para cada usuário
 
-        usuario_data = {"nome": row[0], "funcao": row[1], "login": row[2], "senha": row[3], "tipo": row[4]}
+        usuario_data = {"nome": row[0], 
+                        "funcao": row[1], 
+                        "login": row[2], 
+                        "senha": row[3],
+                        "tipo": row[4]}
         # cria um dicionário com todos usuários
         almoxarifado.usuarios.append(Usuario.from_dict(usuario_data))
 
