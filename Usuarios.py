@@ -70,6 +70,9 @@ class Administrador(Usuario): #ADM
                     #Cria a classe com base no tipo escolhido e adiciona o usuário no dicionário.
                     usuarios.append(novo_usuario)
                     print(f"{nome} cadastrado com sucesso!")
+                else: print(f"Senha invalida.")
+            else: print(f"Login invalido.")
+        else: print(f"Nome invalido.")    
 
     def listar_usuarios(self, usuarios):
         #Mostra todos os usuários
