@@ -1,5 +1,4 @@
 import os;
-import sqlite3;
 
 #Importa os arquivos do trabalho
 from almoxarif import Almoxarifado, Usuario
@@ -7,7 +6,12 @@ from Usuarios import Administrador, AuxServicosGerais, Farmaceutico, Enfermeiro
 from Itens import Item, EquipamentoMedico, ProdutoLimpeza, Medicacao
 import database
 
-#Persistência de dados.
+
+class QuantidadeNegativaError(Exception):
+    print('O ')
+    def init(self, message="A quantidade de itens não pode ser negativa."):
+        super().init(message)
+        print(message)
 
 def Clear(): #Função para limpar o console
     os.system('cls' if os.name == 'nt' else 'clear')  
@@ -113,7 +117,7 @@ if __name__ == "__main__":
                             if(nome_item != ""): #Não podemos adicionar um item sem nome
                                 try:
                                     qtd_item = int(input(f"Quantidade de {nome_item}: "))
-
+                                    if qtd_item <= 0: raise QuantidadeNegativaError
                                     item = None
                                     #Adiciona o item com base na função do usuário que o adiciona
                                     if isinstance(usuario, Enfermeiro):
@@ -127,9 +131,14 @@ if __name__ == "__main__":
                                         print('Item adicionado!')
                                 except ValueError: #Não adiciona o item se a quantidade não for um inteiro.
                                     print("Insira uma quantidade válida")
+                                except QuantidadeNegativaError:  # Trata a exceção de quantidade negativa
+                                    print("Insira uma quantidade válida")
                                 #volta para o menu da função
                                 database.salvar_dados(almoxarifado)
                                 input("Pressione Enter para retornar")
+                                
+
+
 
                         elif opcao == "2": #Mostra a lista dos itens aos quais o usuário tem acesso
                             Clear()
@@ -140,6 +149,7 @@ if __name__ == "__main__":
                             else:
                                 print("Nenhum item encontrado.")
                             input("Pressione Enter para confirmar")
+                        
                         elif opcao == "3": #Retira um "nome" de item
                             Clear()
                             nome_item = input("Digite o nome do item a ser retirado: ")
@@ -151,6 +161,7 @@ if __name__ == "__main__":
                                 #mostra o item encontrado
                                 try:
                                     qtd_remover = int(input("Digite a quantidade a ser retirada: ")) #Pede a quantidade a ser retirada
+                                    if qtd_remover <= 0 : raise QuantidadeNegativaError
                                     item = itens_encontrados[0]
                                     if qtd_remover <= item.quantidade:
                                         item.quantidade -= qtd_remover
@@ -161,11 +172,12 @@ if __name__ == "__main__":
                                         print("Erro: Quantidade insuficiente em estoque.")
                                 except ValueError: #Não retira  o item se a quantidade não for um inteiro.
                                     print("Insira uma quantidade válida")
+                                except QuantidadeNegativaError as e:  # Trata a exceção de quantidade negativa
+                                    print("Insira uma quantidade válida")
                             else: #Se o item não é encontrado, encerramos aqui
                                 print("Item não encontrado.")
                             database.salvar_dados(almoxarifado)
                             input("Pressione Enter para retornar")
-
 
                         elif opcao == "4": #Volta para o menu de Login, deslogando o funcionário
                             print("Saindo...") 
@@ -185,4 +197,3 @@ if __name__ == "__main__":
             print("Saindo....")
             print("Até logo!")
             break
-

@@ -6,6 +6,7 @@ class Item:
         self.nome = nome
         self.quantidade = quantidade
 
+
     def to_dict(self): #Criação do dicionário
         return {"tipo": self.__class__.__name__, "nome": self.nome, "quantidade": self.quantidade}
 
