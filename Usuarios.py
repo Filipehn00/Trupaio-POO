@@ -6,11 +6,27 @@ class Usuario:
     def __init__(self, nome: str, funcao: str, login:str, senha:str): #Construtor da classe com seus atributos
         self.nome = nome
         self.funcao = funcao
-        self.login = login
-        self.senha = senha
+        self._login = login
+        self._senha = senha
 
     def autenticar(self, senha): #Método para autenticar funcionários
         return self.senha == senha
+
+    @property
+    def login(self):
+        return self._login
+
+    @login.setter
+    def login(self, novo_login: str):
+        self._login = novo_login
+
+    @property
+    def senha(self):
+        return self._senha
+
+    @senha.setter
+    def senha(self, nova_senha: str):
+        self._senha = nova_senha
 
     @classmethod
     def to_dict(self): #Salva funcionários no dicionário
@@ -113,7 +129,6 @@ class Enfermeiro(Usuario):
 class AuxServicosGerais(Usuario):
     def acessar_itens(self, almoxarifado):
         return almoxarifado.itens_aux_servicos_gerais
-
 
 #Subclasse Farmaceutico e sua versão do método de acesso aos itens.
 class Farmaceutico(Usuario):
