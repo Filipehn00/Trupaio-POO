@@ -43,7 +43,7 @@ class Almoxarifado:
             input("Pressione Enter para retornar")
             #Isso não acontece em circunstâncias normais
 
-    def saida_item(self, nome, usuario): #Método para retirada de itens
+    def saida_item(self, nome: str, usuario): #Método para retirada de itens
         #Pega o item, se o usuário tem acesso a ele
         if isinstance(usuario, Enfermeiro):
             self.itens_enfermeiro = [item for item in self.itens_enfermeiro if item.nome != nome]

@@ -120,7 +120,7 @@ def corrigir_dados():
             tipo = "Administrador"
         elif funcao == "Enfermeiro":
             tipo = "Enfermeiro"
-        elif funcao == "Farmaceutico":
+        elif funcao == "Farmacêutico":
             tipo = "Farmaceutico"
         elif funcao == "Auxiliar de Serviços Gerais":
             tipo = "AuxServicosGerais"

@@ -166,7 +166,7 @@ if __name__ == "__main__":
                                     if qtd_remover <= item.quantidade:
                                         item.quantidade -= qtd_remover
                                         if item.quantidade == 0: #Remove o item do almoxarifado se a quantidade for igual a zero
-                                            almoxarifado.remover_item(item.nome, usuario)
+                                            almoxarifado.saida_item(item.nome, usuario)
                                         print("Item retirado com sucesso! Faça bom proveito!!")
                                     else: #Não remove mais do que tem
                                         print("Erro: Quantidade insuficiente em estoque.")
