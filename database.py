@@ -4,7 +4,7 @@ from almoxarif import Almoxarifado, Usuario
 from Itens import Item, EquipamentoMedico, ProdutoLimpeza, Medicacao
 
 #Função para iniciar o banco de dados, chamada no início da main
-def init_db(db_name="almoxarifado.db"):
+def init_db(db_name="almoxarifado.db") -> None:
     #Inicializa o banco de dados e cria as tabelas necessárias.
 
     #cria uma conexão com o SQLite3
@@ -36,7 +36,7 @@ def init_db(db_name="almoxarifado.db"):
     conn.close()
 
 #Função para salvar dados, chamada sempre que um item ou usuário é adicionado ou retirado
-def salvar_dados(almoxarifado, db_name="almoxarifado.db"):
+def salvar_dados(almoxarifado: dict, db_name="almoxarifado.db") -> None:
     """Salva os dados do almoxarifado no banco de dados."""
     conn = sqlite3.connect(db_name) #cria uma conexão com o SQLite3
     cursor = conn.cursor() #Cria um cursor
@@ -64,7 +64,7 @@ def salvar_dados(almoxarifado, db_name="almoxarifado.db"):
     conn.close() # Fecha a conexão
 
 # Função para abrir um banco de dados existente, chamada quando o banco de dados é encontrado
-def carregar_dados(db_name="almoxarifado.db"):
+def carregar_dados(db_name="almoxarifado.db") -> dict:
     # Carrega os dados do almoxarifado do banco de dados.
     almoxarifado = Almoxarifado() # cria um objeto da classe Almoxarifado
     conn = sqlite3.connect(db_name) # Cria a conexão
@@ -99,7 +99,7 @@ def carregar_dados(db_name="almoxarifado.db"):
     conn.close()
     return almoxarifado #fecha a conexão e retorna o almoxarifado
 
-def corrigir_dados():
+def corrigir_dados() -> None:
     con = sqlite3.connect("almoxarifado.db")
     cur = con.cursor()
 

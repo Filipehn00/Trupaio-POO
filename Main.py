@@ -1,21 +1,18 @@
 import os;
 
 #Importa os arquivos do trabalho
-from almoxarif import Almoxarifado, Usuario
+
 from Usuarios import Administrador, AuxServicosGerais, Farmaceutico, Enfermeiro
-from Itens import Item, EquipamentoMedico, ProdutoLimpeza, Medicacao
+from Itens import EquipamentoMedico, ProdutoLimpeza, Medicacao
 import database
 
 
-class QuantidadeNegativaError(Exception):
-    print('O ')
-    def init(self, message="A quantidade de itens não pode ser negativa."):
-        super().init(message)
-        print(message)
-
-def Clear(): #Função para limpar o console
+def Clear() -> None: #Função para limpar o console
     os.system('cls' if os.name == 'nt' else 'clear')  
     #Usa o comando adequado para limpar o console dependendo do Sistema
+
+class QuantidadeNegativaError(Exception):
+    pass
 
 if __name__ == "__main__":
     # Inicializa o banco de dados
@@ -136,9 +133,6 @@ if __name__ == "__main__":
                                 #volta para o menu da função
                                 database.salvar_dados(almoxarifado)
                                 input("Pressione Enter para retornar")
-                                
-
-
 
                         elif opcao == "2": #Mostra a lista dos itens aos quais o usuário tem acesso
                             Clear()

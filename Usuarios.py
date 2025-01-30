@@ -1,35 +1,35 @@
 #Usuários e as sublcasses de usuários
 # O módulo abstractmethod cria um método abstrato, assim possibilitando o polomorfismo da função acessar_itens
-from abc import abstractmethod
+from abc import ABC, abstractmethod
 
 class Usuario:
-    def __init__(self, nome: str, funcao: str, login:str, senha:str): #Construtor da classe com seus atributos
+    def __init__(self, nome: str, funcao:str, login:str, senha:str) -> None: #Construtor da classe com seus atributos
         self.nome = nome
         self.funcao = funcao
         self._login = login
         self._senha = senha
 
-    def autenticar(self, senha): #Método para autenticar funcionários
+    def autenticar(self, senha:str) -> bool:  #Método para autenticar funcionários
         return self.senha == senha
 
     @property
-    def login(self):
+    def login(self) -> str:
         return self._login
 
     @login.setter
-    def login(self, novo_login: str):
+    def login(self, novo_login: str) -> str:
         self._login = novo_login
 
     @property
-    def senha(self):
+    def senha(self) -> str:
         return self._senha
 
     @senha.setter
-    def senha(self, nova_senha: str):
+    def senha(self, nova_senha: str) -> str:
         self._senha = nova_senha
 
     @classmethod
-    def to_dict(self): #Salva funcionários no dicionário
+    def to_dict(self) -> dict: #Salva funcionários no dicionário
         return {
             "tipo": self.__class__.__name__,
             "nome": self.nome,
@@ -39,7 +39,7 @@ class Usuario:
         }
 
     @classmethod
-    def from_dict(classe, data): #Puxa os Funcionários do dicionário
+    def from_dict(classe, data: dict) : #Puxa os Funcionários do dicionário
         tipo = data.pop("tipo")
         #Dependendo do tipo de funcionário adicionado, cria a subclasse de usuário
         if tipo == "Administrador":
@@ -52,14 +52,15 @@ class Usuario:
             return AuxServicosGerais(**data)
         else:
             return classe(**data)
+    
     @abstractmethod
-    def acessar_itens(self, almoxarifado):
+    def acessar_itens(self, almoxarifado: dict) -> None:
         pass
 
 
-class Administrador(Usuario): #ADM
+class Administrador(Usuario) : #ADM
     #Somente o adm tem os métdos que adicionam ou removem usuários.
-    def cadastrar_usuario(self, usuarios): 
+    def cadastrar_usuario(self, usuarios: dict) -> None: 
         print("\nEscolha a função do usuário a ser cadastrado:")
         print("1) Enfermeiro")
         print("2) Farmacêutico")
@@ -96,11 +97,11 @@ class Administrador(Usuario): #ADM
         else: print(f"Nome invalido.")    
     
 
-    def listar_usuarios(self, usuarios):
+    def listar_usuarios(self, usuarios:dict) -> dict:
         #Mostra todos os usuários
         return [f"Nome: {user.nome}, Login: {user.login}, Função: {user.funcao}" for user in usuarios]
 
-    def remover_usuario(self, usuarios, login):
+    def remover_usuario(self, usuarios:dict, login:str) -> dict:
         #Remove um usuário
         if any(user.login == login and isinstance(user, Administrador) for user in usuarios):
             #Checa se o usuário é TI
@@ -114,24 +115,24 @@ class Administrador(Usuario): #ADM
         print("Usuário removido com sucesso!!")
         return [user for user in usuarios if user.login != login]
 
-    def limpar_usuarios(self, usuarios):
+    def limpar_usuarios(self, usuarios:dict) -> dict:
         #Remove todos os usuários
         # Preserva apenas os usuários do tipo Administrador
         return [user for user in usuarios if isinstance(user, Administrador)]
 
 #Subclasse Enfermeiro e sua versão do método de acesso aos itens.
 class Enfermeiro(Usuario):
-    def acessar_itens(self, almoxarifado):
+    def acessar_itens(self, almoxarifado:dict) -> list:
         return almoxarifado.itens_enfermeiro
 
 
 #Subclasse Auxiliar de Serviços Gerais e sua versão do método de acesso aos itens.
 class AuxServicosGerais(Usuario):
-    def acessar_itens(self, almoxarifado):
+    def acessar_itens(self, almoxarifado:dict) -> list:
         return almoxarifado.itens_aux_servicos_gerais
 
 #Subclasse Farmaceutico e sua versão do método de acesso aos itens.
 class Farmaceutico(Usuario):
-    def acessar_itens(self, almoxarifado):
+    def acessar_itens(self, almoxarifado:dict) -> list:
         return almoxarifado.itens_farmaceutico
 
