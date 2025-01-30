@@ -1,7 +1,9 @@
-#Não é necessário importar
-#Usuários salvos e as sublcasses de usuários
+#Usuários e as sublcasses de usuários
+# O módulo abstractmethod cria um método abstrato, assim possibilitando o polomorfismo da função acessar_itens
+from abc import abstractmethod
+
 class Usuario:
-    def __init__(self, nome, funcao, login, senha): #Construtor da classe com seus atributos
+    def __init__(self, nome: str, funcao: str, login:str, senha:str): #Construtor da classe com seus atributos
         self.nome = nome
         self.funcao = funcao
         self.login = login
@@ -34,6 +36,9 @@ class Usuario:
             return AuxServicosGerais(**data)
         else:
             return classe(**data)
+    @abstractmethod
+    def acessar_itens(self, almoxarifado):
+        pass
 
 
 class Administrador(Usuario): #ADM
@@ -73,6 +78,7 @@ class Administrador(Usuario): #ADM
                 else: print(f"Senha invalida.")
             else: print(f"Login invalido.")
         else: print(f"Nome invalido.")    
+    
 
     def listar_usuarios(self, usuarios):
         #Mostra todos os usuários

@@ -2,7 +2,7 @@
 #Não é necessário importar nada
 
 class Item:
-    def __init__(self, nome, quantidade): #Construtor(Inicializador) da classe item
+    def __init__(self, nome:str, quantidade:str): #Construtor(Inicializador) da classe item
         self.nome = nome
         self.quantidade = quantidade
 
