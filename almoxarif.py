@@ -4,13 +4,13 @@ import os #importa o sistema operacional para usar a função clear corretamente
 from Usuarios import Usuario, Farmaceutico, AuxServicosGerais, Enfermeiro
 from Itens import Item, EquipamentoMedico, ProdutoLimpeza, Medicacao
 
-def Clear():
+def Clear() -> None:
     os.system('cls' if os.name == 'nt' else 'clear')
 
 
 #Cria a classe Almoxarifado
 class Almoxarifado:
-    def __init__(self): #Construtor do almoxarifado
+    def __init__(self) -> None: #Construtor do almoxarifado
         # 3 listas diferentes de item
         self.itens_enfermeiro = []
         self.itens_farmaceutico = []
@@ -18,7 +18,7 @@ class Almoxarifado:
         #Lista de Funcionários
         self.usuarios = []
 
-    def entrada_item(self, item, usuario): #método para adição de item
+    def entrada_item(self, item, usuario)-> None: #método para adição de item
         if isinstance(usuario, Enfermeiro) and isinstance(item, EquipamentoMedico):
         #Checa se o funcionário está adicionando o item correto
             for i in self.itens_enfermeiro:
@@ -43,7 +43,7 @@ class Almoxarifado:
             input("Pressione Enter para retornar")
             #Isso não acontece em circunstâncias normais
 
-    def saida_item(self, nome: str, usuario): #Método para retirada de itens
+    def saida_item(self, nome: str, usuario)-> None: #Método para retirada de itens
         #Pega o item, se o usuário tem acesso a ele
         if isinstance(usuario, Enfermeiro):
             self.itens_enfermeiro = [item for item in self.itens_enfermeiro if item.nome != nome]
@@ -55,7 +55,7 @@ class Almoxarifado:
         
 
 #Mostra todos os itens aos quais o usuário tem acesso
-    def listar_itens(self, usuario):
+    def listar_itens(self, usuario) -> list:
         if isinstance(usuario, Enfermeiro):
             return self.itens_enfermeiro
         elif isinstance(usuario, Farmaceutico):
@@ -64,7 +64,7 @@ class Almoxarifado:
             return self.itens_aux_servicos_gerais
         
 
-    def buscar_item(self, nome, usuario): #mostra um item com base no nome que o usuário pediu
+    def buscar_item(self, nome:str, usuario): #mostra um item com base no nome que o usuário pediu
         #Só mostra o item se ele estiver na lista que o usuário tem acesso
         if isinstance(usuario, Enfermeiro):
             return [item for item in self.itens_enfermeiro if item.nome.lower() == nome.lower()]
@@ -73,7 +73,7 @@ class Almoxarifado:
         elif isinstance(usuario, AuxServicosGerais):
             return [item for item in self.itens_aux_servicos_gerais if item.nome.lower() == nome.lower()]
 
-def to_dict(self, conexao):
+def to_dict(self, conexao) -> dict:
     cursor = conexao.cursor()
     
     # Recupera os itens para cada tipo de usuário
@@ -99,7 +99,7 @@ def to_dict(self, conexao):
     }
 
 @classmethod
-def from_dict(classe, data, conexao):
+def from_dict(classe, data:dict, conexao) -> dict:
     almoxarifado = classe()
     cursor = conexao.cursor()
 
@@ -120,6 +120,5 @@ def from_dict(classe, data, conexao):
     for usuario in data["usuarios"]:
         cursor.execute("INSERT INTO usuarios (nome, funcao, login, senha, tipo) VALUES (?, ?, ?, ?, ?)",
                        (usuario["nome"], usuario["funcao"], usuario["login"], usuario["senha"], usuario["tipo"]))
-
     conexao.commit()
     return almoxarifado
