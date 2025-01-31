@@ -73,31 +73,6 @@ class Almoxarifado:
         elif isinstance(usuario, AuxServicosGerais):
             return [item for item in self.itens_aux_servicos_gerais if item.nome.lower() == nome.lower()]
 
-def to_dict(self, conexao) -> dict:
-    cursor = conexao.cursor()
-    
-    # Recupera os itens para cada tipo de usuário
-    cursor.execute("SELECT nome, quantidade FROM itens WHERE tipo = 'EquipamentoMedico'")
-    self.itens_enfermeiro = [Item(nome, quantidade) for nome, quantidade in cursor.fetchall()]
-
-    cursor.execute("SELECT nome, quantidade FROM itens WHERE tipo = 'Medicacao'")
-    self.itens_farmaceutico = [Item(nome, quantidade) for nome, quantidade in cursor.fetchall()]
-
-    cursor.execute("SELECT nome, quantidade FROM itens WHERE tipo = 'ProdutoLimpeza'")
-    self.itens_aux_servicos_gerais = [Item(nome, quantidade) for nome, quantidade in cursor.fetchall()]
-
-    # Recupera os usuários
-    cursor.execute("SELECT nome, funcao, login, senha, tipo FROM usuarios")
-    self.usuarios = [Usuario.from_dict({"nome": nome, "funcao": funcao, "login": login, "senha": senha, "tipo": tipo})
-                     for nome, funcao, login, senha, tipo in cursor.fetchall()]
-    
-    return {
-        "itens_enfermeiro": [item.to_dict() for item in self.itens_enfermeiro],
-        "itens_farmaceutico": [item.to_dict() for item in self.itens_farmaceutico],
-        "itens_aux_servicos_gerais": [item.to_dict() for item in self.itens_aux_servicos_gerais],
-        "usuarios": [usuario.to_dict() for usuario in self.usuarios],
-    }
-
 @classmethod
 def from_dict(classe, data:dict, conexao) -> dict:
     almoxarifado = classe()

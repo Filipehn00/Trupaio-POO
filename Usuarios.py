@@ -1,6 +1,4 @@
-#Usuários e as sublcasses de usuários
-# O módulo abstractmethod cria um método abstrato, assim possibilitando o polomorfismo da função acessar_itens
-from abc import ABC, abstractmethod
+from abc import abstractmethod
 
 class Usuario:
     def __init__(self, nome: str, funcao:str, login:str, senha:str) -> None: #Construtor da classe com seus atributos
